@@ -1,0 +1,299 @@
+soil-frog analyses
+========================================================
+Statistical analysis and results presentation and discussion for total concentrations 
+of parent active 
+ingredients (atrazine, imidacloprid, fipronil, triadimenon, pendimethalin).
+
+```{r eval=TRUE, echo=FALSE}
+R.Version()$version.string
+
+if(Sys.info()[4]=="robins.computer.id (run 'Sys.info()[4]')"){
+  frogsoildir <- "C:\\stp_drop\\Dropbox\\amphib_dermalexposure\\DATA\\PLEvsOLS2014\\"
+}
+
+if(Sys.info()[4]=="DC2626UTPURUCKE"){
+  frogsoildir <- "C:\\stp_drop\\Dropbox\\amphib_ple_v_ols_vanmeteretal2015\\"
+}
+
+if(Sys.info()[4]=="stp-air.local"){
+  frogsoildir <- path.expand("~/Dropbox/amphib_dermalexposure/DATA/PLEvsOLS2014/")
+}
+
+library(MASS)
+library(dplyr)
+library(ggplot2)
+
+##################
+#the data sets
+##################
+#everything
+frog.soil <- read.table(paste(frogsoildir,"RDATA.csv",sep=""), header = TRUE, sep = ",")
+colnames(frog.soil)
+class(frog.soil$Day)
+frog.soil$Day <- as.factor(frog.soil$Day)
+frog.soil$Day
+class(frog.soil$Row)
+frog.soil$Row <- as.factor(frog.soil$Row)
+frog.soil$Row
+class(frog.soil$Column)
+class(frog.soil$Pesticide)
+class(frog.soil$SoilType)
+class(frog.soil$Soil)
+class(frog.soil$BodyBurden)
+class(frog.soil$Weight)
+class(frog.soil$Total)
+frog.soil$Total <- as.factor(frog.soil$Total)
+frog.soil$Total
+class(frog.soil$Formulation)
+frog.soil$Formulation <- as.factor(frog.soil$Formulation)
+frog.soil$Formulation
+class(frog.soil$Parent)
+frog.soil$Parent <- as.factor(frog.soil$Parent)
+frog.soil$Parent
+frog.soil$bowlbcf <- frog.soil$BodyBurden/frog.soil$Soil
+frog.soil$surface_area_total <- 1.131 * frog.soil$Weight^0.579
+frog.soil$surface_area_footprint <- 0.425 * frog.soil$Weight^0.85
+```
+#create a data set and do a merge
+#koc data
+#experimental
+#log koc ple
+#Imidacloprid 2.556
+#Atrazine 2.303
+#Triadimefon 3.025
+#Fipronil 4.242
+#Pendimethalin 6.425
+#
+#log koc ols
+#Imidacloprid3.645
+#Atrazine2.634
+#Triadimefon3.010
+#Fipronil 2.864
+#Pendimethalin 1.733
+#
+#literature koc
+#Atrazine  2.24
+#Triadimefon  2.71
+#Fipronil	2.916453949
+#Pendimethalin	3.7
+#Imidacloprid  2.394451681
+
+unique(frog.soil$Pesticide)
+unique(frog.soil$SoilType)
+Pesticide <- c("ATZTOT","FipTOT","Imid","TNDTOT","Pendi","ATZTOT","FipTOT","Imid","TNDTOT","Pendi")
+expKoc <- c(2.303,4.242,2.556,3.025,6.425,2.634,2.864,3.645,3.01,1.733)
+litKoc <- c(2.24,2.92,2.39,2.71,3.7,2.24,2.92,2.39,2.71,3.7)
+SoilType <- c("PLE","PLE","PLE","PLE","PLE","OLS","OLS","OLS","OLS","OLS")
+
+df.merge <- data.frame(Pesticide, expKoc, litKoc, SoilType)
+#View(merge(frog.soil, df.merge, all = TRUE))
+frog.soil <- (merge(frog.soil, df.merge, all = TRUE))
+
+#  Soil Type	%OM	%OC
+#Plott Series	PLE	14.138	8.200
+#Everbard	EC	5.448	3.160
+#Orangeburg loamy-sand	OLS	3.100	1.798
+
+SoilType <- c("PLE","OLS")
+OM <- c(14.138, 3.1)
+OC <- c(8.2, 1.798)
+df.merge2 <- data.frame(SoilType, OM, OC)
+frog.soil <- (merge(frog.soil, df.merge2, all = TRUE))
+
+
+Summary statistics for data set.
+
+```{r eval=TRUE, echo=TRUE}
+str(frog.soil)
+head(frog.soil)
+#View(frog.soil.total.ai)
+#using dplyr
+frog.soil.group <- group_by(frog.soil, Pesticide, SoilType, Formulation, Parent)
+str(frog.soil.group)
+frog.soil.group
+frog.soil.means <- summarise(frog.soil.group, 
+            count = n(),
+            FrogMean = mean(BodyBurden),
+            FrogSD = sd(BodyBurden),
+            SoilMean = mean(Soil),
+            SoilSD = sd(Soil)
+  )
+frog.soil.means
+#View(frog.soil.means)
+
+#Merge means and other statistics back into larger file.
+frog.soil <- merge(frog.soil,frog.soil.means)
+
+#treatment bcf
+frog.soil$treatbcf <- frog.soil$BodyBurden/frog.soil$SoilMean
+```
+
+
+Setup of the main data set frog.soil:
+```{r eval=TRUE, echo=TRUE}
+dim(frog.soil)
+str(frog.soil)
+```
+
+Create additional subsets.
+
+```{r eval=TRUE, echo=FALSE}
+#total only but with formulations
+frog.soil.total <- frog.soil[which(frog.soil$Total==1),]
+#View(frog.soil.total)
+dim(frog.soil.total)
+colnames(frog.soil.total)
+
+#Formulation is unbalanced so drop formulation, parent ais only
+frog.soil.total.ai <- frog.soil.total[which(frog.soil.total$Formulation==0 & 
+                                              frog.soil.total$Parent==1),]
+#View(frog.soil.total.ai)
+dim(frog.soil.total.ai)
+colnames(frog.soil.total.ai)
+
+#drop imidacloprid from ai analysis
+frog.soil.total.noimid <- frog.soil.total.ai[-which(frog.soil.total.ai$Pesticide=="Imid"),]
+#View(frog.soil.total.noimid)
+dim(frog.soil.total.noimid)
+colnames(frog.soil.total.noimid)
+```
+
+Analysis of total analyte concentrations data set.
+
+```{r eval=TRUE, echo=TRUE}
+##################
+#analyses
+##################
+#randomized block design for bowlbcfs
+bowlbcf.total.aov <- aov(bowlbcf ~ Pesticide + SoilType + Formulation + 
+                           surface_area_total + expKoc, data = frog.soil.total)
+summary(bowlbcf.total.aov)
+
+#randomized block design for bowlbcfs
+treatbcf.total.aov <- aov(treatbcf ~ Pesticide + SoilType + Formulation + 
+                           surface_area_total + expKoc, data = frog.soil.total)
+summary(treatbcf.total.aov)
+```
+
+A paired comparison design is implemented to examine the impacts of soil type and surface area. The paired comparison design is essentially a randomized block design where the blocking variable (pesticides) has size 2 and is therefore treated as a nuisance variable. This accounts for the large variation in treatment application rates across the different pesticides tested. The paired comparison design on the bowl bcf finds soil type significant, but not amphibian surface area. 
+
+We evaluate 3 different ways: with bowlbcfs, where each frog tissue concentration is divided by its soil concentration, mean bcf, where each frog tissue concentration is divided by the mean of the soil concentrations for that treatment, and by body.burden where soil concentration is used as an additional covariate.
+
+```{r eval=TRUE, echo=TRUE}
+# is imidacloprid being factored in correctly for the aov
+bowlbcf.total.ai.aov <- aov(bowlbcf ~ Pesticide + SoilType + surface_area_total + expKoc, 
+                              data = frog.soil.total.ai)
+summary(bowlbcf.total.ai.aov)
+bowlbcf.total.noimid.aov <- aov(bowlbcf ~ Pesticide + SoilType + surface_area_total, 
+                                  data = frog.soil.total.noimid)
+summary(bowlbcf.total.noimid.aov)
+pdf()
+qplot(Pesticide, bowlbcf, fill=factor(SoilType), data=frog.soil.total.ai, geom="boxplot", position="dodge")+theme_bw()
+dev.off()
+
+#### the winner #######
+treatbcf.total.ai.aov <- aov(treatbcf ~ Pesticide + SoilType + expKoc, 
+                              data = frog.soil.total.ai)
+summary(treatbcf.total.ai.aov)
+model.tables(treatbcf.total.ai.aov)
+#tukey as anova post-hoc proxy
+TukeyHSD(treatbcf.total.ai.aov)
+
+boxplot(treatbcf ~ Pesticide + SoilType, data =frog.soil.total.ai)
+pesticides <- c("Atrazine", "Fipronil", "Imidacloprid", "Pendimethalin", "Triadimenon")
+qplot(x=Pesticide, y=treatbcf, fill=factor(SoilType), xlab="", ylab="Bioconcentration Factor", 
+      data=frog.soil.total.ai, geom="boxplot", position="dodge") + 
+      theme_bw() +  scale_x_discrete(breaks=c("ATZTOT", "FipTOT", "Imid", "Pendi", "TNDTOT"), labels=pesticides) +
+      guides(fill=guide_legend(title="Soil Type")) + theme(legend.position="top")
+####################################
+
+
+#Bartlett test to test the null hypothesis of equal group variances
+bartlett.test(treatbcf ~ Pesticide, data =frog.soil.total.ai)
+#no sale! for pesticides
+bartlett.test(treatbcf ~ SoilType, data = frog.soil.total.ai)
+#also rejected for soil type, but not grouped by pesticide
+
+#the oneway.test( ) applies a Welch correction for nonhomogeneity
+oneway.test(treatbcf ~ Pesticide + SoilType, data =frog.soil.total.ai)
+
+#nonparameteric kruskal test
+kruskal.test(treatbcf ~ Pesticide, data =frog.soil.total.ai)
+kruskal.test(treatbcf ~ SoilType, data =frog.soil.total.ai)
+
+treatbcf.total.noimid.aov <- aov(treatbcf ~ Pesticide + SoilType + surface_area_total, 
+                                  data = frog.soil.total.noimid)
+summary(treatbcf.total.noimid.aov)
+
+```
+
+We can also consider the pairwise t-test. For this we need the means of the pesticide treatements by soil for the test.
+Doesn't make any sense.
+
+```{r eval=TRUE, echo=TRUE}
+
+pairwise.t.test()
+
+```
+
+```{r eval=TRUE, echo=FALSE}
+#
+bodyburden.total.aov <- aov(BodyBurden ~ Pesticide + SoilType + Soil + Formulation + 
+                              surface_area_total, data = frog.soil.total)
+summary(bodyburden.total.aov)
+bodyburden.total.ai.aov <- aov(BodyBurden ~ Pesticide + SoilType + Soil + 
+                                 surface_area_total, data = frog.soil.total.ai)
+summary(bodyburden.total.ai.aov)
+bodyburden.total.noimid.aov <- aov(BodyBurden ~ Pesticide + SoilType + Soil + Formulation +
+                                     surface_area_total, data = frog.soil.total.noimid)
+summary(bodyburden.total.noimid.aov)
+
+# 5 t-tests for total parents
+pesticides <- unique(frog.soil.total.ai$Pesticide)
+length(pesticides)
+for(pesticide in pesticides){
+  frog.soil.total.ai.tt <- frog.soil.total.ai[which(frog.soil.total.ai$Pesticide==pesticide),]
+  ols.bcf <- frog.soil.total.ai.tt[which(frog.soil.total.ai.tt$SoilType=="OLS"),]
+  ple.bcf <- frog.soil.total.ai.tt[which(frog.soil.total.ai.tt$SoilType=="PLE"),]
+  soil.t.test <- t.test(ols.bcf$bowlbcf,ple.bcf$bowlbcf)
+  print("ols")
+  print(ols.bcf$bowlbcf)
+  print("ple")
+  print(ple.bcf$bowlbcf)
+  print(pesticide)
+  print(soil.t.test)
+}
+
+#switch to aic instead of significance testing for regressing on body burdens
+#everything
+total.lm <- lm(BodyBurden ~ Pesticide + Soil + Formulation + SoilType 
+               + surface_area_footprint, data = frog.soil.total)
+stepAIC(total.lm,  direction = "backward")
+
+#without imidacloprid
+colnames(frog.soil.total.noimid)
+#View(frog.soil.total.noimid)
+noimd.lm <- lm(BodyBurden ~ Pesticide + Soil + Formulation + SoilType + 
+                 surface_area_footprint, data = frog.soil.total.noimid)
+stepAIC(noimd.lm,  direction = "backward")
+
+colnames(frog.soil.total.noimid)
+noimd.lm <- lm(BodyBurden ~ Pesticide + Soil + Formulation + SoilType + surface_area_footprint, 
+               data = frog.soil.total.noimid)
+stepAIC(noimd.lm)
+
+#lump ai and formulation
+
+#active ingredients
+total.ai.lm <- lm(BodyBurden ~ Pesticide + Soil + SoilType 
+               + surface_area_footprint, data = frog.soil.total.ai)
+stepAIC(total.ai.lm,  direction = "backward")
+
+
+noimd.aov <- aov(BodyBurden ~ Pesticide + Soil + Formulation + SoilType + Weight + 
+                   surface_area_footprint, data = frog.soil.total.noimid)
+summary(noimd.aov)
+TukeyHSD(noimd.aov)
+
+#formulation factor does not make sense unless we hange formulation name to equal active ingredient nems=e
+```

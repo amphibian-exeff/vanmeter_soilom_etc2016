@@ -15,7 +15,7 @@ if(Sys.info()[4]=="DC2626UTPURUCKE"){
   frogsoildir <- "C:\\stp_drop\\Dropbox\\amphib_ple_v_ols_vanmeteretal2015\\"
 }
 
-if(Sys.info()[4]=="DC2626UTPURUCKE"){
+if(Sys.info()[4]=="DZ2626UTPURUCKE"){
   frogsoildir <- "C:\\git\\VanMeteretal2016_ple_v_ols\\"
 }
 
@@ -188,27 +188,40 @@ We evaluate 3 different ways: with bowlbcfs, where each frog tissue concentratio
 bowlbcf.total.ai.aov <- aov(bowlbcf ~ Pesticide + SoilType + surface_area_total + expKoc, 
                               data = frog.soil.total.ai)
 summary(bowlbcf.total.ai.aov)
+
+# more significant if imidacloprid is dropped (but not necessary)
 bowlbcf.total.noimid.aov <- aov(bowlbcf ~ Pesticide + SoilType + surface_area_total, 
                                   data = frog.soil.total.noimid)
 summary(bowlbcf.total.noimid.aov)
-pdf()
-qplot(Pesticide, bowlbcf, fill=factor(SoilType), data=frog.soil.total.ai, geom="boxplot", position="dodge")+theme_bw()
-dev.off()
 
-#### the winner #######
+
+qplot(Pesticide, bowlbcf, fill=factor(SoilType), data=frog.soil.total.ai, geom="boxplot", position="dodge")+theme_bw()
+
+#### the winner - aov and boxplot for Van Meter et al. ##############################
+#bcfs found by dividing the frog of each experimental unit by the average concentration 
+#of the soil over the treatment
 treatbcf.total.ai.aov <- aov(treatbcf ~ Pesticide + SoilType + expKoc, 
                               data = frog.soil.total.ai)
 summary(treatbcf.total.ai.aov)
 model.tables(treatbcf.total.ai.aov)
+
+#for reporting - http://www.bodowinter.com/tutorial/bw_anova_general.pdf
+#soiltype
+# p = 0.00165, F= 10.999, df1 = 1, df2 = 53
+
 #tukey as anova post-hoc proxy
 TukeyHSD(treatbcf.total.ai.aov)
 
-boxplot(treatbcf ~ Pesticide + SoilType, data =frog.soil.total.ai)
-pesticides <- c("Atrazine", "Fipronil", "Imidacloprid", "Pendimethalin", "Triadimenon")
-qplot(x=Pesticide, y=treatbcf, fill=factor(SoilType), xlab="", ylab="Bioconcentration Factor", 
-      data=frog.soil.total.ai, geom="boxplot", position="dodge") + 
-      theme_bw() +  scale_x_discrete(breaks=c("ATZTOT", "FipTOT", "Imid", "Pendi", "TNDTOT"), labels=pesticides) +
-      guides(fill=guide_legend(title="Soil Type")) + theme(legend.position="top")
+#figure 1 of Van Meter et al. manuscript
+#pdf(paste(frogsoildir,"rvm2016_fig1.pdf", sep=""))
+png(paste(frogsoildir,"rvm2016_fig1.png", sep=""))
+  boxplot(treatbcf ~ Pesticide + SoilType, data =frog.soil.total.ai)
+  pesticides <- c("Atrazine", "Fipronil", "Imidacloprid", "Pendimethalin", "Triadimenon")
+  qplot(x=Pesticide, y=treatbcf, fill=factor(SoilType), xlab="", ylab="Bioconcentration Factor", 
+        data=frog.soil.total.ai, geom="boxplot", position="dodge") + 
+        theme_bw() +  scale_x_discrete(breaks=c("ATZTOT", "FipTOT", "Imid", "Pendi", "TNDTOT"), labels=pesticides) +
+        guides(fill=guide_legend(title="Soil Type")) + theme(legend.position="top")
+dev.off()
 ####################################
 
 

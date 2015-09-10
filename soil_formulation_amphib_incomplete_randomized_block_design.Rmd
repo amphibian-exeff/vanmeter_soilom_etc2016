@@ -15,6 +15,10 @@ if(Sys.info()[4]=="DC2626UTPURUCKE"){
   frogsoildir <- "C:\\stp_drop\\Dropbox\\amphib_ple_v_ols_vanmeteretal2015\\"
 }
 
+if(Sys.info()[4]=="DC2626UTPURUCKE"){
+  frogsoildir <- "C:\\git\\VanMeteretal2016_ple_v_ols\\"
+}
+
 if(Sys.info()[4]=="stp-air.local"){
   frogsoildir <- path.expand("~/Dropbox/amphib_dermalexposure/DATA/PLEvsOLS2014/")
 }

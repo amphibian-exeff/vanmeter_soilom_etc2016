@@ -25,10 +25,17 @@ Introduction
 ========================================================
 Data set, statistical analyses, graphics and inference concerning effect of organic carbon in soil on dermal bioconcentration in amphibians. Analytes include active ingredients for commonly used pesticides (atrazine, imidacloprid, fipronil, triadimenon, pendimethalin).
 
+Distribution
+========================================================
+This page is public at:
+http://rpubs.com/puruckertom/rvm2016
+
+The git repo holding this code is available at:
+https://github.com/puruckertom/VanMeteretal2016_ple_v_ols
+
 Computational environment
 ========================================================
-Location of this repository: 
-https://github.com/puruckertom/VanMeteretal2016_ple_v_ols
+
 ```{r eval=FALSE, echo=FALSE}
 #library(installr) #windows only currently
 #updateR()

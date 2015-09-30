@@ -1,0 +1,14 @@
+**** Metadata for RDATA.txt Van Meter et al. 2015. Pesticide uptake across the amphibian dermis through soil and aerial overspray exposures. Archives of Environmental Contamination and Toxicology. X:X-X. ****
+Column labels and description of the column. 
+Day - Day of testing over the course of the 2 day experiment.
+Row - Position of the exposure chamber in the experiment. 
+Column - Position of the exposure chamber in the experiment. 
+Pesticide - Pesticide or metabolite measured in the frog after exposure. 
+SoilType - Two different soil types were used in the study - PLE = Plott series soil and OLS = Orangeburg loamy-sand soil.
+BodyBurden - Frog whole body active ingredient tissue concentration in ppm after an 8 hour exposure.
+Soil - Soil active ingredient concentration in ppm after an 8 hour exposure.
+Weight - Weight of amphibian in grams.
+Total - Flag indicating the concentration is the total of the applied pesticide along with the active ingredient metabolites. 
+Formulation - Flag indicates if the active ingredient is from a formulation = 1 or dissolved in MeOH = 0. 
+Parent - Flag indicating that the active ingredient is a parent compound = 1 or a metabolite of the parent compound = 0.
+

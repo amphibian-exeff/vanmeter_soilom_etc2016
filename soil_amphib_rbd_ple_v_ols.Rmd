@@ -1,8 +1,8 @@
 ---
 title: "Statistical Analyses for Van Meter et al 2016"
 output:
-  pdf_document:
-    toc: yes
+#  pdf_document:
+#    toc: yes
   html_document:
     toc: yes
 ---
@@ -11,6 +11,14 @@ output:
 ```{r eval=FALSE, echo=FALSE}
 #ctrl-shift k to knit r markdown
 #https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf
+# TeX needed for markdown
+#Windows: MiKTeX (Complete) - http://miktex.org/2.9/setup
+#(NOTE: Be sure to download the Complete rather than Basic installation)
+
+#Mac OS X: TexLive 2013 (Full) - http://tug.org/mactex/
+#(NOTE: Download with Safari rather than Chrome _strongly_ recommended)
+
+#Linux: Use system package manager
 ```
 
 Introduction
@@ -29,6 +37,11 @@ Version and installed libraries.
 ```{r eval=TRUE, echo=TRUE}
 R.Version()$version.string
 Sys.info()[4]
+#check to see if needed packages are installed
+list.of.packages <- c("ggplot2", "dplyr")
+new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+if(length(new.packages)) install.packages(new.packages)
+#load relevant packages
 library(MASS)
 library(dplyr, warn.conflicts = FALSE)
 library(ggplot2)
@@ -219,6 +232,11 @@ frog.soil.total.ai <- frog.soil.total[which(frog.soil.total$Formulation==0 &
 #View(frog.soil.total.ai)
 dim(frog.soil.total.ai)
 colnames(frog.soil.total.ai)
+```
+
+This is the main table of summary results used in the results section for bcf (BodyBurden, treatbcf), for the soil table (SoilMean, SoilSD) and for the figure (treatbcf).
+```{r eval=TRUE, echo=FALSE}
+frog.soil.total.ai[,c(1,2,8,10,22:24)]
 ```
 
 ```{r eval=TRUE, echo=FALSE}

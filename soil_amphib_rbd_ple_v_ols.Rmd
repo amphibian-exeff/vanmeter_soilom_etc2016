@@ -301,23 +301,36 @@ summary(treatbcf.total.ai.aov)
 model.tables(treatbcf.total.ai.aov)
 ```
 
-```{r eval=TRUE, echo=TRUE}
-  pesticides <- c("Atrazine", "Fipronil", "Imidacloprid", "Pendimethalin", "Triadimenon")
-  qplot(x=Pesticide, y=treatbcf, fill=factor(SoilType), xlab="", ylab="Bioconcentration Factor", 
-        data=frog.soil.total.ai, geom="boxplot", position="dodge") + 
-        theme_bw() +  scale_x_discrete(breaks=c("ATZTOT", "FipTOT", "Imid", "Pendi", "TNDTOT"),  labels=pesticides) + guides(fill=guide_legend(title="Soil Type")) + theme(legend.position="top")
-```
-
 Generate figure as png for the manuscript.
 ```{r eval=TRUE, echo=TRUE}
 #figure 1 of Van Meter et al. manuscript
 #pdf(paste(frogsoildir,"rvm2016_fig1.pdf", sep=""))
+#levels(frog.soil.total.ai$Pesticide)
+#levels(droplevels(frog.soil.total.ai$Pesticide))
+#frog.soil.total.ai$Pesticide = factor(frog.soil.total.ai$Pesticide,levels(
+#  frog.soil.total.ai$Pesticide)[c("Imid", "ATZTOT", "TNDTOT", "FipTOT", "Pendi")])
+frog.soil.total.ai$Pesticide <- factor(frog.soil.total.ai$Pesticide, levels = c("Imid", "ATZTOT", "TNDTOT", "FipTOT", "Pendi"))
+#levels(frog.soil.total.ai$Pesticide) <- c("Imid", "ATZTOT", "TNDTOT", "FipTOT", "Pendi")
 png(paste(frogsoildir,"rvm2016_fig1.png", sep=""))
-  pesticides <- c("Atrazine", "Fipronil", "Imidacloprid", "Pendimethalin", "Triadimenon")
+  pesticides <- c("Imidacloprid", "Atrazine", "Triadimenon", "Fipronil", "Pendimethalin")
+  qplot(x=Pesticide, y=treatbcf, fill=factor(SoilType), xlab="", ylab="Bioconcentration Factor", 
+        data=frog.soil.total.ai, geom="boxplot", position="dodge") + theme_bw() +  
+        scale_x_discrete(breaks=c("Imid", "ATZTOT", "TNDTOT", "FipTOT", "Pendi"),  labels=pesticides) + 
+        guides(fill=guide_legend(title="Soil Type")) + theme(legend.position="top")
+dev.off()
+
+```
+
+For the html.
+```{r eval=TRUE, echo=TRUE}
+  #pesticides <- c("Atrazine", "Fipronil", "Imidacloprid", "Pendimethalin", "Triadimenon")
+  #reordering by kow
+  pesticides <- c("Imidacloprid", "Atrazine", "Triadimenon", "Fipronil", "Pendimethalin")
   qplot(x=Pesticide, y=treatbcf, fill=factor(SoilType), xlab="", ylab="Bioconcentration Factor", 
         data=frog.soil.total.ai, geom="boxplot", position="dodge") + 
-        theme_bw() +  scale_x_discrete(breaks=c("ATZTOT", "FipTOT", "Imid", "Pendi", "TNDTOT"),  labels=pesticides) + guides(fill=guide_legend(title="Soil Type")) + theme(legend.position="top")
-dev.off()
+        theme_bw() +  
+        scale_x_discrete(breaks=c("Imid", "ATZTOT", "TNDTOT", "FipTOT", "Pendi"),  labels=pesticides) + 
+        guides(fill=guide_legend(title="Soil Type")) + theme(legend.position="top")
 ```
 
 Some additional stuff we did not use

@@ -301,7 +301,11 @@ summary(treatbcf.total.ai.aov)
 model.tables(treatbcf.total.ai.aov)
 ```
 
-Generate figure as png for the manuscript.
+Generate figure as png for the manuscript. ggplot boxplots are different than regular R boxplots:
+http://docs.ggplot2.org/0.9.3.1/geom_boxplot.html
+
+The upper and lower "hinges" correspond to the first and third quartiles (the 25th and 75th percentiles). The upper whisker extends from the hinge to the highest value that is within 1.5 * IQR of the hinge, where IQR is the inter-quartile range, or distance between the first and third quartiles. The lower whisker extends from the hinge to the lowest value within 1.5 * IQR of the hinge. Data beyond the end of the whiskers are outliers and plotted as points (as specified by Tukey).
+
 ```{r eval=TRUE, echo=TRUE}
 #figure 1 of Van Meter et al. manuscript
 #pdf(paste(frogsoildir,"rvm2016_fig1.pdf", sep=""))
@@ -309,7 +313,7 @@ Generate figure as png for the manuscript.
 #levels(droplevels(frog.soil.total.ai$Pesticide))
 #frog.soil.total.ai$Pesticide = factor(frog.soil.total.ai$Pesticide,levels(
 #  frog.soil.total.ai$Pesticide)[c("Imid", "ATZTOT", "TNDTOT", "FipTOT", "Pendi")])
-frog.soil.total.ai$Pesticide <- factor(frog.soil.total.ai$Pesticide, levels = c("Imid", "ATZTOT", "TNDTOT", "FipTOT", "Pendi"))
+frog.soil.total.ai$Pesticide <- factor(frog.soil.total.ai$Pesticide, levels = c("Imid", "ATZTOT", "TNDTOT", "FipTOT", "Pendi"), ordered = TRUE)
 #levels(frog.soil.total.ai$Pesticide) <- c("Imid", "ATZTOT", "TNDTOT", "FipTOT", "Pendi")
 png(paste(frogsoildir,"rvm2016_fig1.png", sep=""))
   pesticides <- c("Imidacloprid", "Atrazine", "Triadimenon", "Fipronil", "Pendimethalin")

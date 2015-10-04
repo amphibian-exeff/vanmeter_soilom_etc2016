@@ -605,14 +605,15 @@ summary(treatbcf.total.ai.aov)</code></pre>
 ##  0.03371  0.01133  0.01813 -0.01133  0.00399 -0.00823  0.00823 -0.01813 
 ##    4.242    6.425 
 ## -0.00399 -0.03371</code></pre>
-<p>Generate figure as png for the manuscript.</p>
+<p>Generate figure as png for the manuscript. ggplot boxplots are different than regular R boxplots: <a href="http://docs.ggplot2.org/0.9.3.1/geom_boxplot.html">http://docs.ggplot2.org/0.9.3.1/geom_boxplot.html</a></p>
+<p>The upper and lower “hinges” correspond to the first and third quartiles (the 25th and 75th percentiles). The upper whisker extends from the hinge to the highest value that is within 1.5 * IQR of the hinge, where IQR is the inter-quartile range, or distance between the first and third quartiles. The lower whisker extends from the hinge to the lowest value within 1.5 * IQR of the hinge. Data beyond the end of the whiskers are outliers and plotted as points (as specified by Tukey).</p>
 <pre class="r"><code>#figure 1 of Van Meter et al. manuscript
 #pdf(paste(frogsoildir,&quot;rvm2016_fig1.pdf&quot;, sep=&quot;&quot;))
 #levels(frog.soil.total.ai$Pesticide)
 #levels(droplevels(frog.soil.total.ai$Pesticide))
 #frog.soil.total.ai$Pesticide = factor(frog.soil.total.ai$Pesticide,levels(
 #  frog.soil.total.ai$Pesticide)[c(&quot;Imid&quot;, &quot;ATZTOT&quot;, &quot;TNDTOT&quot;, &quot;FipTOT&quot;, &quot;Pendi&quot;)])
-frog.soil.total.ai$Pesticide &lt;- factor(frog.soil.total.ai$Pesticide, levels = c(&quot;Imid&quot;, &quot;ATZTOT&quot;, &quot;TNDTOT&quot;, &quot;FipTOT&quot;, &quot;Pendi&quot;))
+frog.soil.total.ai$Pesticide &lt;- factor(frog.soil.total.ai$Pesticide, levels = c(&quot;Imid&quot;, &quot;ATZTOT&quot;, &quot;TNDTOT&quot;, &quot;FipTOT&quot;, &quot;Pendi&quot;), ordered = TRUE)
 #levels(frog.soil.total.ai$Pesticide) &lt;- c(&quot;Imid&quot;, &quot;ATZTOT&quot;, &quot;TNDTOT&quot;, &quot;FipTOT&quot;, &quot;Pendi&quot;)
 png(paste(frogsoildir,&quot;rvm2016_fig1.png&quot;, sep=&quot;&quot;))
   pesticides &lt;- c(&quot;Imidacloprid&quot;, &quot;Atrazine&quot;, &quot;Triadimenon&quot;, &quot;Fipronil&quot;, &quot;Pendimethalin&quot;)

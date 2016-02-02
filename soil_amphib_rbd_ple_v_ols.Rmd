@@ -23,7 +23,7 @@ output:
 
 Introduction
 ========================================================
-Data set, statistical analyses, graphics and inference concerning effect of organic carbon in soil on dermal bioconcentration in amphibians. Analytes include active ingredients for commonly used pesticides (atrazine, imidacloprid, fipronil, triadimenon, pendimethalin).
+Data set, statistical analyses, graphics and inference concerning effect of organic carbon in soil on dermal bioconcentration in amphibians. Analytes include active ingredients for commonly used pesticides (atrazine, imidacloprid, fipronil, triadimefon, pendimethalin).
 
 Distribution
 ========================================================
@@ -315,22 +315,25 @@ The upper and lower "hinges" correspond to the first and third quartiles (the 25
 #  frog.soil.total.ai$Pesticide)[c("Imid", "ATZTOT", "TNDTOT", "FipTOT", "Pendi")])
 frog.soil.total.ai$Pesticide <- factor(frog.soil.total.ai$Pesticide, levels = c("Imid", "ATZTOT", "TNDTOT", "FipTOT", "Pendi"), ordered = TRUE)
 #levels(frog.soil.total.ai$Pesticide) <- c("Imid", "ATZTOT", "TNDTOT", "FipTOT", "Pendi")
-png(paste(frogsoildir,"rvm2016_fig1.png", sep=""))
-tiff(paste(frogsoildir,"rvm2016_fig1.tiff", sep=""))
+#png(paste(frogsoildir,"rvm2016_fig1.png", sep=""))
+#tiff(paste(frogsoildir,"rvm2016_fig1.tiff", sep=""))
+
+pesticides <- c("Imidacloprid", "Atrazine", "Triadimefon", "Fipronil", "Pendimethalin")
+
+jpeg(paste(frogsoildir,"rvm2016_fig1.jpg", sep=""))
   pesticides <- c("Imidacloprid", "Atrazine", "Triadimenon", "Fipronil", "Pendimethalin")
   qplot(x=Pesticide, y=treatbcf, fill=factor(SoilType), xlab="", ylab="Bioconcentration Factor", 
         data=frog.soil.total.ai, geom="boxplot", position="dodge") + theme_bw() +  
-        scale_x_discrete(breaks=c("Imid", "ATZTOT", "TNDTOT", "FipTOT", "Pendi"),  labels=pesticides) + 
-        guides(fill=guide_legend(title="Soil Type")) + theme(legend.position="top")
+        scale_x_discrete(breaks=c("Imid", "ATZTOT", "TNDTOT", "FipTOT", "Pendi"),  labels=pesticides)         + guides(fill=guide_legend(title="Soil Type")) + theme(legend.position="top")
 dev.off()
 
 ```
 
 For the html.
 ```{r eval=TRUE, echo=TRUE}
-  #pesticides <- c("Atrazine", "Fipronil", "Imidacloprid", "Pendimethalin", "Triadimenon")
+  #pesticides <- c("Atrazine", "Fipronil", "Imidacloprid", "Pendimethalin", "Triadimefon")
   #reordering by kow
-  pesticides <- c("Imidacloprid", "Atrazine", "Triadimenon", "Fipronil", "Pendimethalin")
+  pesticides <- c("Imidacloprid", "Atrazine", "Triadimefon", "Fipronil", "Pendimethalin")
   qplot(x=Pesticide, y=treatbcf, fill=factor(SoilType), xlab="", ylab="Bioconcentration Factor", 
         data=frog.soil.total.ai, geom="boxplot", position="dodge") + 
         theme_bw() +  

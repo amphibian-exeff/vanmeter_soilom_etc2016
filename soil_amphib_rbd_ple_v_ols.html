@@ -90,7 +90,7 @@ img {
 <h1>Computational environment</h1>
 <p>Version and installed libraries.</p>
 <pre class="r"><code>R.Version()$version.string</code></pre>
-<pre><code>## [1] &quot;R version 3.2.2 (2015-08-14)&quot;</code></pre>
+<pre><code>## [1] &quot;R version 3.2.3 (2015-12-10)&quot;</code></pre>
 <pre class="r"><code>Sys.info()[4]</code></pre>
 <pre><code>##          nodename 
 ## &quot;DZ2626UTPURUCKE&quot;</code></pre>
@@ -110,7 +110,9 @@ library(ggplot2)</code></pre>
 #the data sets
 ##################
 #everything
-frog.soil &lt;- read.table(paste(frogsoildir,&quot;RDATA.csv&quot;,sep=&quot;&quot;), header = TRUE, sep = &quot;,&quot;)
+file.exists(paste(frogsoildir,&quot;RDATA.csv&quot;,sep=&quot;&quot;))</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>frog.soil &lt;- read.table(paste(frogsoildir,&quot;RDATA.csv&quot;,sep=&quot;&quot;), header = TRUE, sep = &quot;,&quot;)
 str(frog.soil)</code></pre>
 <pre><code>## 'data.frame':    264 obs. of  11 variables:
 ##  $ Day        : int  2 2 2 2 2 2 2 2 2 2 ...

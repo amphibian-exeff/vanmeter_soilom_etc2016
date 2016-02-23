@@ -64,7 +64,7 @@ if(Sys.info()[4]=="DC2626UTPURUCKE"){
 }
 
 if(Sys.info()[4]=="DZ2626UTPURUCKE"){
-  frogsoildir <- "C:\\git\\VanMeteretal2016_ple_v_ols\\"
+  frogsoildir <- "k:\\git\\VanMeteretal2016_ple_v_ols\\"
 }
 
 if(Sys.info()[4]=="stp-air.local"){
@@ -84,6 +84,7 @@ https://github.com/puruckertom/VanMeteretal2016_ple_v_ols/blob/master/RDATA.csv
 #the data sets
 ##################
 #everything
+file.exists(paste(frogsoildir,"RDATA.csv",sep=""))
 frog.soil <- read.table(paste(frogsoildir,"RDATA.csv",sep=""), header = TRUE, sep = ",")
 str(frog.soil)
 ```

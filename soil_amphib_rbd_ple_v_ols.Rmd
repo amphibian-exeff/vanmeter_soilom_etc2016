@@ -321,7 +321,7 @@ frog.soil.total.ai$Pesticide <- factor(frog.soil.total.ai$Pesticide, levels = c(
 
 pesticides <- c("Imidacloprid", "Atrazine", "Triadimefon", "Fipronil", "Pendimethalin")
 
-jpeg(paste(frogsoildir,"rvm2016_fig1.jpg", sep=""))
+jpeg(paste(frogsoildir,"rvm2016_fig1.jpg", sep=""),quality=100)
   pesticides <- c("Imidacloprid", "Atrazine", "Triadimefon", "Fipronil", "Pendimethalin")
   qplot(x=Pesticide, y=treatbcf, fill=factor(SoilType), xlab="", ylab="Bioconcentration factor", 
         data=frog.soil.total.ai, geom="boxplot", position="dodge") + theme_bw() +  

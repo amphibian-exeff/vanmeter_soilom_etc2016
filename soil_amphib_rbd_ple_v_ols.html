@@ -602,6 +602,15 @@ jpeg(paste(frogsoildir,&quot;rvm2016_fig1.jpg&quot;, sep=&quot;&quot;),quality=1
 <pre class="r"><code>dev.off()</code></pre>
 <pre><code>## quartz_off_screen 
 ##                 2</code></pre>
+<pre class="r"><code>pdf(paste(frogsoildir,&quot;rvm2016_fig1.pdf&quot;, sep=&quot;&quot;))
+  pesticides &lt;- c(&quot;Imidacloprid&quot;, &quot;Atrazine&quot;, &quot;Triadimefon&quot;, &quot;Fipronil&quot;, &quot;Pendimethalin&quot;)
+  qplot(x=Pesticide, y=treatbcf, fill=factor(SoilType), xlab=&quot;&quot;, ylab=&quot;Bioconcentration factor&quot;, 
+        data=frog.soil.total.ai, geom=&quot;boxplot&quot;, position=&quot;dodge&quot;) + theme_bw() +  
+        scale_x_discrete(breaks=c(&quot;Imid&quot;, &quot;ATZTOT&quot;, &quot;TNDTOT&quot;, &quot;FipTOT&quot;, &quot;Pendi&quot;),  labels=pesticides)         + guides(fill=guide_legend(title=&quot;Soil type&quot;)) + theme(legend.position=&quot;top&quot;)</code></pre>
+<pre><code>## Warning: `position` is deprecated</code></pre>
+<pre class="r"><code>dev.off()</code></pre>
+<pre><code>## quartz_off_screen 
+##                 2</code></pre>
 <p>For the html.</p>
 <pre class="r"><code>  #pesticides &lt;- c(&quot;Atrazine&quot;, &quot;Fipronil&quot;, &quot;Imidacloprid&quot;, &quot;Pendimethalin&quot;, &quot;Triadimefon&quot;)
   #reordering by kow

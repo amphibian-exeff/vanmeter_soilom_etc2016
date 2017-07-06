@@ -1,7 +1,0 @@
-name: Publish Document
-account: rpubs
-server: rpubs.com
-bundleId:
-        https://api.rpubs.com/api/v1/document/115005/cca9396ccab04d108348377ff7e8d64b
-url: http://rpubs.com/puruckertom/115005
-when: 1444059880.25361

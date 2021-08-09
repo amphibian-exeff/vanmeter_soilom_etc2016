@@ -1,5 +1,5 @@
 # vanmeter_soilom_etc2016
-Code and date repository for Van Meter, R.J.; Glinski, D.; Henderson, Purucker, S. T., 2016. Soil organic matter content effects on pesticide bioconcentration in American toads (Anaxyrus americanus) Environmental Toxicology and Chemistry, 35(11):2734-2741.
+Code and date repository for Van Meter, R.J.; Glinski, D.; Henderson, Purucker, S. T., 2016. Soil organic matter content effects on pesticide bioconcentration in American toads (Anaxyrus americanus) Environmental Toxicology and Chemistry, 35(11):2734-2741. https://doi.org/10.1002/etc.3439
 
 [![DOI](https://zenodo.org/badge/31033635.svg)](https://zenodo.org/badge/latestdoi/31033635)
 
